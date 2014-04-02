@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product name="de.fsch.ibot.app" application="de.fsch.ibot.app.IBotApplication">
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/de.fsch.ibot.app/css/default.css">
+         </property>
+         <property
+               name="clearPersistedState"
+               value="true">
+         </property>
+         <property
+               name="appName"
+               value="de.fsch.ibot.app">
+         </property>
+      </product>
+   </extension>
+   
+   <extension 	id="IBotApplication"
+         		point="org.eclipse.core.runtime.applications">
+   		<application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+         class="de.fsch.ibot.app.IBotApplication">
+         </run>
+      </application>
+   </extension>
+
+</plugin>
