@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IProduct;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.e4.core.contexts.ContextFunction;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -40,6 +38,7 @@ import org.eclipse.e4.ui.workbench.IExceptionHandler;
 import org.eclipse.e4.ui.workbench.IModelResourceHandler;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.e4.ui.workbench.lifecycle.PostContextCreate;
+import org.eclipse.e4.ui.workbench.lifecycle.PreSave;
 import org.eclipse.e4.ui.workbench.lifecycle.ProcessAdditions;
 import org.eclipse.e4.ui.workbench.lifecycle.ProcessRemovals;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -52,8 +51,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.css.CSSStyleDeclaration;
+
+import de.fsch.ibot.ui.internal.workbench.PartRenderingEngine;
 
 @SuppressWarnings("restriction")
 public class IBotApplication implements IApplication
@@ -70,6 +72,7 @@ private String[] args;
 private Object lcManager;
 private IModelResourceHandler handler;
 private E4Workbench workbench = null;
+private Location instanceLocation = null;
 
 	public IBotApplication()
 	{
@@ -81,8 +84,28 @@ private E4Workbench workbench = null;
 	{
 	createE4Workbench(context);
 	
-	// launch(this.getClass());
-	return null;
+	instanceLocation = (Location) workbench.getContext().get(E4Workbench.INSTANCE_LOCATION);
+	
+	IEclipseContext workbenchContext = workbench.getContext();
+	
+	/*
+	 * Hier ist der Einstiegspunkt, um die GUI zu erstellen.
+	 * SWT erstellt einen UI-Thread. Solange dieser läuft, bleibt die Applikation hier stehen
+	 * Ähnlich müsste es dann auch mit dem JavaFX-Thread geschehen
+	 */
+	workbench.createAndRunUI(workbench.getApplication());
+	
+		// Save the model into the targetURI
+		if (lcManager != null) 
+		{
+		ContextInjectionFactory.invoke(lcManager, PreSave.class, workbenchContext, null);
+		}
+	// TODO saveModel();
+	workbench.close();
+
+	if (workbench.isRestart()) {return EXIT_RESTART;}
+
+	return EXIT_OK;
 	}
 	
 	public E4Workbench createE4Workbench(IApplicationContext applicationContext) 
@@ -207,8 +230,7 @@ private E4Workbench workbench = null;
 	String presentationURI = getArgValue(IWorkbench.PRESENTATION_URI_ARG, applicationContext, false);
 		if (presentationURI == null) 
 		{
-		// TODO WICHTIG !!!
-		// presentationURI = PartRenderingEngine.engineURI;
+		presentationURI = PartRenderingEngine.PARTRENDERINGENGINE_URI;
 		}
 	appContext.set(IWorkbench.PRESENTATION_URI_ARG, presentationURI);
 
@@ -331,19 +353,16 @@ private E4Workbench workbench = null;
 	saveAndRestore = value == null || Boolean.parseBoolean(value);
 	eclipseContext.set(IWorkbench.PERSIST_STATE, Boolean.valueOf(saveAndRestore));
 
-	
-		/*
-		 * SWT spezifisch
-		 * when -data @none or -data @noDefault options
-		Location instanceLocation = WorkbenchSWTActivator.getDefault().getInstanceLocation();
-		if (instanceLocation != null && instanceLocation.getURL() != null) {
-			eclipseContext.set(E4Workbench.INSTANCE_LOCATION, instanceLocation);
-		} else {
-			eclipseContext.set(IWorkbench.PERSIST_STATE, false);
+		if (instanceLocation != null && instanceLocation.getURL() != null) 
+		{
+		eclipseContext.set(E4Workbench.INSTANCE_LOCATION, instanceLocation);
+		} 
+		else 
+		{
+		eclipseContext.set(IWorkbench.PERSIST_STATE, false);
 		}
-		 */
-
-		// Persisted state
+		
+	// Persisted state
 	boolean clearPersistedState;
 	value = getArgValue(IWorkbench.CLEAR_PERSISTED_STATE, appContext, true);
 	clearPersistedState = value != null && Boolean.parseBoolean(value);
