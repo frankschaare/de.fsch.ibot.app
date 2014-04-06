@@ -1,7 +1,6 @@
 package de.fsch.ibot.app;
 
 import java.util.List;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
