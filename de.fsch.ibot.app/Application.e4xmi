@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_t6crMLpGEeOX3c0uQRJEGQ" elementId="org.eclipse.e4.ide.application" bindingContexts="_t6dSSLpGEeOX3c0uQRJEGQ">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_t6dSQLpGEeOX3c0uQRJEGQ" label="de.fsch.ibot.app" width="500" height="400">
-    <children xsi:type="advanced:PerspectiveStack" xmi:id="_t6dSX7pGEeOX3c0uQRJEGQ">
-      <children xsi:type="advanced:Perspective" xmi:id="_t6dSYLpGEeOX3c0uQRJEGQ">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_t6dSYbpGEeOX3c0uQRJEGQ">
-          <children xsi:type="basic:PartStack" xmi:id="_t6dSYrpGEeOX3c0uQRJEGQ"/>
-        </children>
-      </children>
-    </children>
-  </children>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_t6crMLpGEeOX3c0uQRJEGQ" elementId="org.eclipse.e4.ide.application" bindingContexts="_t6dSSLpGEeOX3c0uQRJEGQ">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_t6dSQLpGEeOX3c0uQRJEGQ" label="de.fsch.ibot.app" width="500" height="400"/>
   <bindingTables xmi:id="_t6dSTbpGEeOX3c0uQRJEGQ" bindingContext="_t6dSSLpGEeOX3c0uQRJEGQ">
     <bindings xmi:id="_t6dSTrpGEeOX3c0uQRJEGQ" keySequence="M1+Q"/>
     <bindings xmi:id="_t6dSUbpGEeOX3c0uQRJEGQ" keySequence="M1+O"/>
